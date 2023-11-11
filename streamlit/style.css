@@ -1,0 +1,98 @@
+h1,
+h2,
+h3,
+h4 {
+  color: #000000;
+}
+
+code {
+  color: #1ec3bc;
+}
+
+#MainMenu {
+  display: none;
+}
+
+div[data-testid="stDecoration"] {
+  display: none;
+}
+
+footer {
+  display: none;
+}
+
+/* Radio buttons */
+
+.st-cc {
+  color: black;
+  font-weight: 500;
+}
+
+/* Sidebar */
+
+.logo {
+  margin-left: -25px;
+}
+
+section[data-testid="stSidebar"] > div {
+  background-image: linear-gradient(320deg,hsl(198.92,79.27%,32.16%) 0,hsl(198.86,80.46%,34.12%) 21%,hsl(198.68,82.51%,35.88%) 30%,hsl(198.15,84.38%,37.65%) 39%,hsl(198.03,86.07%,39.41%) 46%,hsl(197.93,87.62%,41.18%) 54%,hsl(197.36,90.78%,42.55%) 61%,hsl(197.06,93.78%,44.12%) 69%,hsl(196.88,96.55%,45.49%) 79%,hsl(198.92,79.27%,32.16%)100%);
+  padding-top: 2rem;
+  padding-left: 1.5rem;
+}
+
+section[data-testid="stSidebar"] button[title="View fullscreen"] {
+  display: none;
+}
+
+section[data-testid="stSidebar"] button[kind="icon"] {
+  display: none;
+}
+
+section[data-testid="stSidebar"] .st-be {
+  margin-top: 1.5rem;
+}
+
+section[data-testid="stSidebar"] .st-bk {
+  margin-bottom: 1.5rem;
+  background:	#F5F5F5;
+  width: 60%;
+  padding: 0.5rem;
+  border-radius: 20px;
+  box-shadow: -1.5px 0 .4em #D3D3D3;
+}
+
+section[data-testid="stSidebar"] .st-c0 {
+  background-color: black;
+}
+
+section[data-testid="stSidebar"] hr {
+  margin-top: 30px;
+  border-color: white;
+  width: 50px;
+}
+
+section[data-testid="stSidebar"] h2 {
+  color: white;
+}
+
+/* Images */
+
+button[title="View fullscreen"] {
+  display: none;
+}
+
+/* hr */
+
+hr {
+  width: 200px;
+  border-width: 5px;
+  border-color: #10b8dd;
+  margin-top: 0px;
+}
+
+/* First Page */
+
+section[tabindex="0"] .block-container {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
