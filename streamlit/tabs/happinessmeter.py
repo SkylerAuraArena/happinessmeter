@@ -1,14 +1,38 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import sklearn
 from joblib import load
 
 title = "Happiness Meter"
 sidebar_name = "Happiness Meter"
+prediction = "Happiness Score :"
 
-def predict():
+def predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, positive, negative):
+    # La colonne pour l'Europe Centrale et de l'Est est supprimée car elle est la référence.
+    X_test = pd.DataFrame({
+        'Log GDP per capita': [gdp],
+        'Social support': [socsup],
+        'Healthy life expectancy at birth': [life_exp],
+        'Freedom to make life choices': [freedom],
+        'Generosity': [generosity],
+        'Perceptions of corruption': [corruption],
+        'Positive affect': [positive],
+        'Negative affect': [negative],
+        'Regional indicator_Commonwealth of Independent States': [0],
+        'Regional indicator_East Asia': [0],
+        'Regional indicator_Latin America and Caribbean': [0],
+        'Regional indicator_Middle East and North Africa': [0],
+        'Regional indicator_North America and ANZ': [0],
+        'Regional indicator_South Asia': [0],
+        'Regional indicator_Southeast Asia': [0],
+        'Regional indicator_Sub-Saharan Africa': [0],
+        'Regional indicator_Western Europe': [0]
+    })
+    if continent != 'Central and eastern Europe':
+        X_test['Regional indicator_' + continent] = 1
     loaded_model = load('../models/happinessmeter.joblib')
-    return loaded_model.predict(X_test_scaled)
+    return loaded_model.predict(X_test)
 
 def run():
 
@@ -29,13 +53,7 @@ def run():
     corruption = st.slider('Perception of corruption', 0.00, 10.00, 7.40)
     positive = st.slider('Positive affects', 0.00, 10.00, 7.10)
     negative = st.slider('Negative affects', 0.00, 10.00, 2.68)
-
-    st.write('The current Continent is ', continent)
-    st.write('The current GDP is ', gdp)
-    st.write('The current Social Support is ', socsup)
-    st.write('The current Life expectancy is ', life_exp)
-    st.write('The current Freedom is ', freedom)
-    st.write('The current Generosity is ', generosity)
-    st.write('The current Corruption is ', corruption)
-    st.write('The current Positive affects is ', positive)
-    st.write('The current Negative affects is ', negative)
+    trigger = st.button("Prédire", type="primary")
+    if trigger:
+        prediction = str(predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, positive, negative))
+        st.write('The models predicts a Life Ladder level of ', prediction)
