@@ -17,4 +17,10 @@ def run():
         """
     )
 
+    st.markdown(
+        """
+        This is not the third sample tab.
+        """
+    )
+
     st.write(pd.DataFrame(np.random.randn(100, 4), columns=list("ABCD")))
