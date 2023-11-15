@@ -11,6 +11,10 @@ title = "Happiness Meter"
 sidebar_name = "Happiness Meter"
 prediction = "Happiness Score :"
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+csv_path = os.path.join(dir_path, "../../data/data2022.csv")
+df_country = pd.read_csv(csv_path, sep=';')
+
 def normalize(df):
     scaler=MinMaxScaler()
     cols=['Log GDP per capita','Social support','Healthy life expectancy at birth','Freedom to make life choices','Generosity',
@@ -48,13 +52,35 @@ def predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, p
         X_test['Regional indicator_' + continent] = 1
     X_test = normalize(X_test)
     # Chemin absolu vers le dossier contenant app.py
-    dir_path = os.path.dirname(os.path.realpath(__file__))
     model_path = os.path.join(dir_path, "../../models/happinessmeter.joblib")
     loaded_model = load(model_path)
     return loaded_model.predict(X_test)
 
-def run():
+def find_closest_countries(predicted_value, df, num_countries=5):
+    # Calculer la différence absolue entre la valeur prédite et chaque valeur dans le dataframe
+    # Nettoyer la chaîne de caractères pour enlever les crochets
+    predicted_value = predicted_value.strip("[]")
 
+    # Convertir la chaîne de caractères nettoyée en flottant
+    predicted_value = float(predicted_value)
+
+    # Convertir la colonne en string si ce n'est pas déjà le cas
+    if df['Life Ladder'].dtype != 'O':  # 'O' signifie object
+        df['Life Ladder'] = df['Life Ladder'].astype(str)
+
+    # Remplacer les virgules par des points
+    df['Life Ladder'] = df['Life Ladder'].str.replace(',', '.')
+    df = df.sort_values(by='Life Ladder', ascending=False).reset_index(drop=True)
+    df.index = df.index + 1
+    # Convertir la colonne en numérique
+    df['Life Ladder'] = pd.to_numeric(df['Life Ladder'], errors='coerce')
+    # Calculer la différence
+    df['Difference'] = df['Life Ladder'].apply(lambda x: abs(x - predicted_value))
+    # Trier le dataframe par différence et prendre les premiers pays
+    closest_countries = df.sort_values('Difference').head(num_countries)
+    return closest_countries
+
+def run():
     st.title(title)
 
     multi = '''Veuillez sélectionner les valeurs afin d\'obtenir le score de bonheur correspondant.\nLes valeurs par défaut correspondent aux moyennes de chaque variable.\n\n
@@ -75,4 +101,8 @@ def run():
     trigger = st.button("Prédire", type="primary")
     if trigger:
         prediction = str(predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, positive, negative))
-        st.write('The models predicts a Life Ladder level of ', prediction)
+        st.write('Le niveau de bien-être prédit est de ', prediction.strip("[]"))
+        # Comparer avec les pays du dataframe
+        closest_countries = find_closest_countries(prediction, df_country)
+        st.write(f'Pays ayant eu un niveau de bien-être le plus proche en 2022 (sur {len(df_country)} pays) :')
+        st.dataframe(closest_countries[['Country name', 'Life Ladder','Difference']])
