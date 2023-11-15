@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import streamlit as st
+import os
 
 from tabs import intro, second_tab, third_tab, happinessmeter, about
 
@@ -12,7 +13,11 @@ st.set_page_config(
     page_icon="https://cdn-icons-png.flaticon.com/512/166/166538.png",
 )
 
-with open("style.css", "r") as f:
+# Chemin absolu vers le dossier contenant app.py
+dir_path = os.path.dirname(os.path.realpath(__file__))
+css_file_path = os.path.join(dir_path, "style.css")
+
+with open(css_file_path, "r") as f:
     style = f.read()
 
 st.markdown("""<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">""", unsafe_allow_html=True)

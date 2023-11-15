@@ -3,10 +3,25 @@ import pandas as pd
 import numpy as np
 import sklearn
 from joblib import load
+import os
+from sklearn.preprocessing import MinMaxScaler
+import pickle
 
 title = "Happiness Meter"
 sidebar_name = "Happiness Meter"
 prediction = "Happiness Score :"
+
+def normalize(df):
+    scaler=MinMaxScaler()
+    cols=['Log GDP per capita','Social support','Healthy life expectancy at birth','Freedom to make life choices','Generosity',
+        'Perceptions of corruption','Positive affect','Negative affect']
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    scaler_path = os.path.join(dir_path, "../../models/scaler.pkl")
+    loaded_scaler = load(scaler_path)
+    with open(scaler_path, 'rb') as file:
+        loaded_scaler = pickle.load(file)
+    df[cols]=loaded_scaler.transform(df[cols])
+    return df
 
 def predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, positive, negative):
     # La colonne pour l'Europe Centrale et de l'Est est supprimée car elle est la référence.
@@ -31,7 +46,11 @@ def predict(continent, gdp, socsup, life_exp, freedom, generosity, corruption, p
     })
     if continent != 'Central and eastern Europe':
         X_test['Regional indicator_' + continent] = 1
-    loaded_model = load('../models/happinessmeter.joblib')
+    X_test = normalize(X_test)
+    # Chemin absolu vers le dossier contenant app.py
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    model_path = os.path.join(dir_path, "../../models/happinessmeter.joblib")
+    loaded_model = load(model_path)
     return loaded_model.predict(X_test)
 
 def run():
