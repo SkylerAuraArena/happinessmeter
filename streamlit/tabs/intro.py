@@ -7,7 +7,7 @@ sidebar_name = "Introduction"
 def run():
     
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    img_path = os.path.join(dir_path, "../../data/happiness.webp")
+    img_path = os.path.join(dir_path, "../assets/happiness.png")
     st.image(img_path, width=300)
 
     st.title(title)
