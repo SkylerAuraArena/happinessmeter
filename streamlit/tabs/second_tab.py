@@ -21,22 +21,22 @@ def run():
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     
-    csv_path = os.path.join(dir_path, "../../data/dataviz/df_global2.csv")
-    df_global2=pd.read_csv(csv_path)
-    csv_path = os.path.join(dir_path, "../../data/dataviz/df_global2_mean_region.csv")
-    df_global2_mean_region=pd.read_csv(csv_path)
-    csv_path = os.path.join(dir_path, "../../data/dataviz/df_global2_groupby_year.csv")
-    df_global2_groupby_year=pd.read_csv(csv_path)
-    csv_path = os.path.join(dir_path, "../../data/dataviz/df_global2_carte.csv")
-    df_global2_carte=pd.read_csv(csv_path)
-    csv_path = os.path.join(dir_path, "../../data/dataviz/df_global2_mean.csv")
-    df_global2_mean=pd.read_csv(csv_path)
-    csv_path = os.path.join(dir_path, "../../data/dataviz/country_list.csv")
+    csv_path = os.path.join(dir_path, "../../data/df_global.csv")
+    df_global=pd.read_csv(csv_path)
+    csv_path = os.path.join(dir_path, "../../data/df_global_mean_region.csv")
+    df_global_mean_region=pd.read_csv(csv_path)
+    csv_path = os.path.join(dir_path, "../../data/df_global_groupby_year.csv")
+    df_global_groupby_year=pd.read_csv(csv_path)
+    csv_path = os.path.join(dir_path, "../../data/df_global_carte.csv")
+    df_global_carte=pd.read_csv(csv_path)
+    csv_path = os.path.join(dir_path, "../../data/df_global_mean.csv")
+    df_global_mean=pd.read_csv(csv_path)
+    csv_path = os.path.join(dir_path, "../../data/country_list.csv")
     df_country_list=pd.read_csv(csv_path)
     
     #J'arrondis les scores de LL à 1 décimal
-    df_global2_mean_region['Life Ladder']=np.round(df_global2_mean_region['Life Ladder'],1)
-    df_global2_mean_region=df_global2_mean_region[['Country name','Regional indicator','Life Ladder']]
+    df_global_mean_region['Life Ladder']=np.round(df_global_mean_region['Life Ladder'],1)
+    df_global_mean_region=df_global_mean_region[['Country name','Regional indicator','Life Ladder']]
 
     selected_chart = st.radio(' ', ['Cartographie du bonheur'
     , 'Corrélation des indicateurs', 'Evolution des variables au fil du temps'])
@@ -46,19 +46,19 @@ def run():
         st.header("Les nuances du bonheur à l'échelle planétaire")
 
         # Import du GeoJSON qui nous servira pour les fontiere de la map
-        geojson_data = os.path.join(dir_path, "../../data/dataviz/countries.geojson")
+        geojson_data = os.path.join(dir_path, "../../data/countries.geojson")
         with open(geojson_data, encoding='utf-8') as f:
             geojson_data=f.read()
 
     
     
-        selected_year = st.slider('Sélectionnez l\'année', min_value=int(df_global2_carte['year'].min()), max_value=int(df_global2_carte['year'].max()))
+        selected_year = st.slider('Sélectionnez l\'année', min_value=int(df_global_carte['year'].min()), max_value=int(df_global_carte['year'].max()))
 
         def filter_data_by_year(df, selected_year):
-            return df_global2_carte[df_global2_carte['year'] == selected_year]
+            return df_global_carte[df_global_carte['year'] == selected_year]
 
         # Filtrer le DataFrame en fonction de l'année sélectionnée
-        filtered_df = filter_data_by_year(df_global2_carte, selected_year)
+        filtered_df = filter_data_by_year(df_global_carte, selected_year)
 
         #On créer la map
         m = folium.Map(location=[0, 0], zoom_start=1.3)
@@ -82,7 +82,7 @@ def run():
             folium.Choropleth(
             geo_data=geojson_data,
             name='choropleth',
-            data=df_global2_carte,
+            data=df_global_carte,
             columns=['Country name', 'Life Ladder'],  
             key_on='feature.properties.ADMIN',  
             fill_color='RdYlGn', 
@@ -100,7 +100,7 @@ def run():
         st.subheader("Inégalite du score de Life Ladder parmi les continents")  
         
         fig, ax = plt.subplots(figsize=(10, 6))
-        sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global2_mean_region, ax=ax,color="#aad3df")
+        sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global_mean_region, ax=ax,color="#aad3df")
         plt.xticks(rotation=45)
 
         
@@ -121,7 +121,7 @@ def run():
 
         sns.set()
         fig, ax = plt.subplots(figsize=(10, 8))
-        heatmap = sns.heatmap(df_global2_mean.corr(), annot=True, cmap='Blues', fmt='.2f', linewidths=.5, ax=ax)
+        heatmap = sns.heatmap(df_global_mean.corr(), annot=True, cmap='Blues', fmt='.2f', linewidths=.5, ax=ax)
 
         # Ajout de la heatmap à Streamlit
         st.subheader("Quels indicateurs economiques et sociaux influent le plus sur le score de bonheur ?")
@@ -129,12 +129,12 @@ def run():
 
         st.subheader("Le PIB, la santé... Ont-ils avoir avec le bonheur des habitants d'un pays ?")
 
-        indicators_list3 = df_global2.columns.difference(['year']).difference(['Country name']).difference(['Regional indicator']).difference(['Life Ladder'])
+        indicators_list3 = df_global.columns.difference(['year']).difference(['Country name']).difference(['Regional indicator']).difference(['Life Ladder'])
         selected_indicators3 = st.multiselect('Sélectionnez l\'indicateur à afficher:', indicators_list3)
 
         for indicator3 in selected_indicators3:
             # Création du graphique avec Plotly Express
-            fig = px.scatter(df_global2, x=indicator3, y='Life Ladder', color='Regional indicator', hover_data=['Country name'])
+            fig = px.scatter(df_global, x=indicator3, y='Life Ladder', color='Regional indicator', hover_data=['Country name'])
             # Affichage du graphique dans Streamlit
             st.plotly_chart(fig)
 
@@ -148,12 +148,12 @@ def run():
         # Titre de l'application Streamlit
         st.subheader("Évolution des indicateurs au Fil du Temps")
         #liste des indicateurs
-        indicators_list = df_global2_groupby_year.columns.difference(['Year'])
+        indicators_list = df_global_groupby_year.columns.difference(['Year'])
         selected_indicators = st.multiselect('Sélectionnez les indicateurs à afficher:', indicators_list)
         #Création du graphique
         fig, ax = plt.subplots(figsize=(10, 6))
         for indicator in selected_indicators:
-            ax.plot(df_global2_groupby_year['Year'], df_global2_groupby_year[indicator], label=indicator)
+            ax.plot(df_global_groupby_year['Year'], df_global_groupby_year[indicator], label=indicator)
         # Mise en forme du graphique
         ax.set_xlabel('Année')
         ax.set_ylabel('Valeur normalisée de l\'indicateur')
@@ -171,7 +171,7 @@ def run():
         Country_list = df_country_list['Country name']
         selected_Country = st.multiselect('Sélectionnez un pays à afficher:', Country_list)
         
-        indicators_list2 = df_global2.columns.difference(['year']).difference(['Country name'])
+        indicators_list2 = df_global.columns.difference(['year']).difference(['Country name'])
         selected_indicators2 = st.multiselect('Sélectionnez les indicateurs à afficher:', indicators_list2)
 
         selected_chart = st.radio(' ', ['Données normalisées'
@@ -179,10 +179,10 @@ def run():
 
         if selected_chart == 'Données normalisées':
 
-            df_global2_filtered = df_global2[df_global2['Country name'].isin(selected_Country)]
+            df_global_filtered = df_global[df_global['Country name'].isin(selected_Country)]
 
-            normalized_df = (df_global2_filtered.iloc[:, 3:] - df_global2_filtered.iloc[:, 3:].min()) / (df_global2_filtered.iloc[:, 3:].max() - df_global2_filtered.iloc[:, 3:].min())
-            normalized_df = pd.concat([df_global2_filtered[['Country name','Regional indicator','year']], normalized_df], axis=1)
+            normalized_df = (df_global_filtered.iloc[:, 3:] - df_global_filtered.iloc[:, 3:].min()) / (df_global_filtered.iloc[:, 3:].max() - df_global_filtered.iloc[:, 3:].min())
+            normalized_df = pd.concat([df_global_filtered[['Country name','Regional indicator','year']], normalized_df], axis=1)
 
             
             
@@ -201,12 +201,12 @@ def run():
             st.pyplot(fig)
 
         elif selected_chart == 'Données non normalisées':
-            df_global2_filtered = df_global2[df_global2['Country name'].isin(selected_Country)]
+            df_global_filtered = df_global[df_global['Country name'].isin(selected_Country)]
                     
             #Création du graphique
             fig, ax = plt.subplots(figsize=(10, 6))
             for indicator2 in selected_indicators2:
-                ax.plot(df_global2_filtered['year'], df_global2_filtered[indicator2], label=indicator2)
+                ax.plot(df_global_filtered['year'], df_global_filtered[indicator2], label=indicator2)
             # Mise en forme du graphique
             ax.set_xlabel('Année')
             ax.set_ylabel('Valeur de l\'indicateur')
