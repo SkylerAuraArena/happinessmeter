@@ -7,8 +7,8 @@ sidebar_name = "Introduction"
 def run():
     
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    img_path = os.path.join(dir_path, "../assets/happiness.png")
-    st.image(img_path, width=300)
+    img_path = os.path.join(dir_path, "../assets/happinessrect.png")
+    st.image(img_path)
 
     st.title(title)
 

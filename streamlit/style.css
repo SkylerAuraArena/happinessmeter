@@ -21,7 +21,7 @@ p, li {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 3vh;
+  padding-top: 7.5vh;
   padding-bottom: 3vh;
 }
 
@@ -95,12 +95,6 @@ section[data-testid="stSidebar"] h2 {
 
 button[title="View fullscreen"] {
   display: none;
-}
-
-.e115fcil2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* hr */
