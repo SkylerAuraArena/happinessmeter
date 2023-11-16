@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 import pickle
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
+import os
 
 title = "Happiness Meter"
 sidebar_name = "Happiness Meter"
@@ -109,11 +110,16 @@ def find_closest_countries(predicted_values, df, num_countries=5):
     return closest_countries
 
 def run():
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    img_path = os.path.join(dir_path, "../assets/happiness_meter.png")
+    st.image(img_path)
+
     st.title(title)
 
-    multi = '''Veuillez sélectionner les valeurs afin d\'obtenir le score de bonheur correspondant.\nLes valeurs par défaut correspondent aux moyennes de chaque variable.\n\n
-    '''
-    st.text(multi)
+    st.markdown("---")
+    
+    st.markdown("Veuillez sélectionner les valeurs afin d'obtenir le score de bonheur correspondant.Les valeurs par défaut correspondent aux moyennes de chaque variable.")
 
     continent = st.selectbox(label='Select the continental area of the country you want to predict the happiness score:',
     options=('Central and eastern Europe', 'Commonwealth of Independent States', 'East Asia', 'Latin America and Caribbean', 'Middle East and North Africa', 'North America and ANZ', 'South Asia', 'Southeast Asia', 'Sub-Saharan Africa', 'Western Europe'))
