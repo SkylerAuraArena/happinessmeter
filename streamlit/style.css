@@ -1,8 +1,28 @@
+html {
+  font-size: 16px; /* Default setting, 1rem = 16px */
+}
+
+body {
+  font-family: 'Calibri', 'Arial', sans-serif;
+}
+
 h1,
 h2,
 h3,
 h4 {
   color: #000000;
+}
+
+p, li {
+  text-align: justify;
+}
+
+.main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
 }
 
 code {
@@ -75,6 +95,12 @@ section[data-testid="stSidebar"] h2 {
 
 button[title="View fullscreen"] {
   display: none;
+}
+
+.e115fcil2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* hr */
