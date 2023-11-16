@@ -21,14 +21,14 @@ def run():
     st.write("Cette résolution intègre la notion de « pursuit of happiness » ou recherche du bonheur comme objectif de \
             développement pour les politiques publiques des pays membres. Cette notion est ancienne puisqu'elle est déjà présente \
             dans le préambule de la déclaration d'indépendance des États-Unis d'Amérique. Pour suivre l'évolution du bonheur dans \
-            les différents pays du monde, le World Happiness Report est publié chaque année par le Sustainable Development Solutions \
-            Network en utilisant les données du Gallup World Poll.")
-    st.write("Ces données sont collectées par The Gallup Organization, une \
+            les différents pays du monde, le ***World Happiness Report*** est publié chaque année par le ***Sustainable Development Solutions \
+            Network***en utilisant les données du ***Gallup World Poll***.")
+    st.write("Ces données sont collectées par ***The Gallup Organization***, une \
             entreprise américaine spécialisée dans les sondages. L'ensemble des données publiées annuellement sont disponibles sur https://worldhappiness.report.")
             
     st.write("#### Objectif")
     
-    st.markdown("Dans ce projet, nous allons effectuer une analyse approfondie des données par le World Hapiness Report. Cette enquête a \
+    st.markdown("Dans ce projet, nous allons effectuer une analyse approfondie des données par le ***World Hapiness Report***. Cette enquête a \
                 pour objectif d'estimer le bonheur des pays autour de la planète à l'aide de mesures socio-économiques. Nous présenterons également\
                 ces données à l'aide de visualisation intéractives et réaliserons la modélisation de ces données.")
 

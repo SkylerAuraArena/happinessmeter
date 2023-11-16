@@ -17,14 +17,6 @@ p, li {
   text-align: justify;
 }
 
-.main{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 7.5vh;
-  padding-bottom: 3vh;
-}
-
 code {
   color: #1ec3bc;
 }
@@ -38,7 +30,8 @@ div[data-testid="stDecoration"] {
 }
 
 footer {
-  display: none;
+  margin-top: 1.5vh;
+  /* display: none; */
 }
 
 /* Radio buttons */

@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import os
 
-title = "Exploration"
-sidebar_name = "Exploration"
+title = "Visualisation"
+sidebar_name = "Visualisation"
 
 def run():
 
