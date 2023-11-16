@@ -5,9 +5,7 @@ import pandas as pd
 title = "Exploration"
 sidebar_name = "Exploration"
 
-# Import des données des dataframes
-
-
+# Import des jeux de données
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 csv_path = os.path.join(dir_path, "../../data/world-happiness-report.csv")
@@ -20,7 +18,10 @@ df2_full.index = df2_full.index + 1
 
 def run():
 
-    st.image("https://dst-studio-template.s3.eu-west-3.amazonaws.com/2.gif")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    img_path = os.path.join(dir_path, "../assets/happiness_explo.png")
+    st.image(img_path)
+
     st.title(title)
 
     st.markdown("---")

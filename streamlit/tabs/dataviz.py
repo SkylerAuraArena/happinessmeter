@@ -15,6 +15,9 @@ sidebar_name = "Visualisation"
 
 def run():
 
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    img_path = os.path.join(dir_path, "../assets/happiness_squared.png")
+    st.image(img_path)
 
     st.title(title)
     #J'importe les données 

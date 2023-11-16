@@ -7,7 +7,7 @@ sidebar_name = "Introduction"
 def run():
     
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    img_path = os.path.join(dir_path, "../assets/happinessrect.png")
+    img_path = os.path.join(dir_path, "../assets/happiness_rect.png")
     st.image(img_path)
 
     st.title(title)
@@ -26,13 +26,13 @@ def run():
     st.write("Ces données sont collectées par ***The Gallup Organization***, une \
             entreprise américaine spécialisée dans les sondages. L'ensemble des données publiées annuellement sont disponibles sur https://worldhappiness.report.")
             
-    st.write("#### Objectif")
+    st.write("### Objectif")
     
     st.markdown("Dans ce projet, nous allons effectuer une analyse approfondie des données par le ***World Hapiness Report***. Cette enquête a \
                 pour objectif d'estimer le bonheur des pays autour de la planète à l'aide de mesures socio-économiques. Nous présenterons également\
                 ces données à l'aide de visualisation intéractives et réaliserons la modélisation de ces données.")
 
-    st.write("#### Problématiques")
+    st.write("### Problématiques")
     
     st.markdown(
     """

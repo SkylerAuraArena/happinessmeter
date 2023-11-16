@@ -29,6 +29,10 @@ div[data-testid="stDecoration"] {
   display: none;
 }
 
+img {
+  padding-top: 1vh;
+}
+
 footer {
   margin-top: 1.5vh;
   /* display: none; */
