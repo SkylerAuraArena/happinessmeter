@@ -117,8 +117,6 @@ def run():
 
         # Ajouter le graphique à Streamlit
         st.pyplot(fig)
-
-        
         
     elif selected_chart == 'Corrélation des indicateurs':
 
@@ -139,13 +137,7 @@ def run():
             # Création du graphique avec Plotly Express
             fig = px.scatter(df_global, x=indicator3, y='Life Ladder', color='Regional indicator', hover_data=['Country name'])
             # Affichage du graphique dans Streamlit
-            st.plotly_chart(fig)
-
-
-    
-
-
-        
+            st.plotly_chart(fig)    
 
     elif selected_chart == 'Evolution des variables au fil du temps':
         # Titre de l'application Streamlit
@@ -219,6 +211,5 @@ def run():
             ax.set_facecolor('#ffffff')
             # Ajout du graphique à Streamlit
             st.pyplot(fig)
-
 
     else : None
