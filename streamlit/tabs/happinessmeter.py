@@ -119,9 +119,9 @@ def run():
 
     st.markdown("---")
     
-    st.markdown("Veuillez sélectionner les valeurs afin d'obtenir le score de bonheur correspondant.Les valeurs par défaut correspondent aux moyennes de chaque variable.")
+    st.markdown("Veuillez sélectionner les valeurs afin d'obtenir le score de bonheur correspondant. Les valeurs par défaut correspondent aux moyennes de chaque variable.")
 
-    continent = st.selectbox(label='Select the continental area of the country you want to predict the happiness score:',
+    continent = st.selectbox(label='Sélectionner le continent à attribuer pour la prédiction :',
     options=('Central and eastern Europe', 'Commonwealth of Independent States', 'East Asia', 'Latin America and Caribbean', 'Middle East and North Africa', 'North America and ANZ', 'South Asia', 'Southeast Asia', 'Sub-Saharan Africa', 'Western Europe'))
     gdp = st.slider(label='Log GDP per capita', min_value=0.00, max_value=13.00, value=9.38)
     socsup = st.slider(label='Social support level', min_value=0.00, max_value=10.00, value=8.13) / 10

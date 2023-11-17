@@ -23,8 +23,8 @@ def run():
 
     bullet_points = [
     "Le coefficient de ***Gini*** (mesure des inégalités)",
-    "le rapport sur la liberté de la presse de ***Reporter sans Frontières***",
-    "l’index de liberté économique de la fondation ***Heritage***"
+    "Le rapport sur la liberté de la presse de ***Reporter sans Frontières***",
+    "L’index de liberté économique de la fondation ***Heritage***"
     ]
 
     st.write("### Perspectives")

@@ -52,7 +52,7 @@ def run():
     
     
     st.code('''
-            feats = df_global.drop('Life Ladder', axis=1)
+    feats = df_global.drop('Life Ladder', axis=1)
     target = df_global['Life Ladder']
             
     from sklearn.model_selection import train_test_split
@@ -63,8 +63,7 @@ def run():
     
     st.write("- **Utilisation du** ***OneHotEncoder***")
     
-    st.markdown( "Les modèles de ***machine learning*** n’étant pas en mesure d’**interpréter les variables qualitatives**, nous devons encoder le nom des régions \
-                afin de rendre ces valeurs exploitables dans **X_train** et **X_test**. Nous utilisons donc la méthode nommée ***One Hot Encoding*** qui créera n-1 colonnes remplies de valeurs booléennes pour savoir si cette ligne appartient à la région indiquée par le nom de la colonne.")
+    st.markdown( "Les modèles de ***machine learning*** n’étant pas en mesure d’**interpréter les variables qualitatives**, nous devons encoder le nom des régions afin de rendre ces valeurs exploitables dans **X_train** et **X_test**. Nous utilisons donc la méthode nommée ***One Hot Encoding*** qui créera n-1 colonnes remplies de valeurs booléennes pour savoir si cette ligne appartient à la région indiquée par le nom de la colonne.")
     
     # utilisation du OneHotEncoder
     ohe = OneHotEncoder(drop="first", sparse=False)
@@ -87,7 +86,7 @@ def run():
     X_test_concat = pd.concat([X_test,cat_test], axis = 1)
     
     st.markdown("On obtient des jeux d'entrainement et de test finaux pour lequels la colonne 'Regional indicator' a bien été encodée.\
-                Les jeux contiennents dorénavants **17 variables explicatives**. Le jeu de données est prêt pour l'entraînement de modèles.")
+                Les jeux contiennent dorénavant **17 variables explicatives**. Le jeu de données est prêt pour l'entraînement de modèles.")
 
     agree = st.checkbox('Afficher **X_train** encodé')
     if agree:

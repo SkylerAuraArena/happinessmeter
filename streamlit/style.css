@@ -45,6 +45,12 @@ footer {
   font-weight: 500;
 }
 
+section[data-testid="stSidebar"] .st-bk {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
 /* Sidebar */
 
 .logo {

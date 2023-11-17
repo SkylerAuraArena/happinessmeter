@@ -34,7 +34,7 @@ def run():
 
     st.markdown("---")
     
-    st.markdown("Dans cette partie, nous allons voir quels sont les traitements que nous avons effectués sur le jeu de données afin de le préparer pour la partie ***features engineering***. Comme expliqué dans la description des données, nous avons extrait de ***Kaggle*** deux bases de données :")
+    st.markdown("Dans cette partie, nous allons voir quels sont les traitements que nous avons effectués sur le jeu de données afin de le préparer pour la partie ** visualisation des données**. Comme expliqué dans la description des données, nous avons extrait de ***Kaggle*** deux bases de données :")
     
     st.markdown(
                 """
@@ -191,7 +191,7 @@ def run():
     st.write(f'Affichage du nombre de doublons par colonne dans le jeu de données soit : {df_global2.isna().sum().sum()} valeurs manquantes.')
     df_global2.isna().sum()
     
-    st.markdown("Il n'y a plus de valeurs manquantes dans le jeu de données.")
+    st.markdown("Après la 2ème imputation via les scores du quartile Q1, il n'y a plus de valeurs manquantes dans le jeu de données.")
     
     # Vérification des valeurs manquantes. # le graphe est vide confirmant l'absence de valeurs manquantes
     
