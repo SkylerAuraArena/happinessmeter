@@ -94,7 +94,6 @@ def find_closest_countries(predicted_values, df, num_countries=5):
     for i, v in enumerate(cols):
         # Convertion de la chaîne de caractères nettoyée en flottant
         predicted_value = float(predicted_values[i])
-        st.write(predicted_value)
         # Convertion de la colonne en string si ce n'est pas déjà le cas
         if df[v].dtype != 'O':  # 'O' signifie object
             df[v] = df[v].astype(str)
