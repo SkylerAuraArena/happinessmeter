@@ -88,12 +88,13 @@ def find_closest_countries(predicted_values, df, num_countries=5):
     # Normalisation des valeurs
     values_dict = {col: [val] for col, val in zip(cols, predicted_values)}
     df_predicted_values = pd.DataFrame(values_dict)
-    df_predicted_values = normalize_array(df_predicted_values)
     # Transforme le dataframe en liste
     predicted_values = df_predicted_values.values.tolist()[0]
+
     for i, v in enumerate(cols):
         # Convertion de la chaîne de caractères nettoyée en flottant
         predicted_value = float(predicted_values[i])
+        st.write(predicted_value)
         # Convertion de la colonne en string si ce n'est pas déjà le cas
         if df[v].dtype != 'O':  # 'O' signifie object
             df[v] = df[v].astype(str)
