@@ -33,23 +33,17 @@ def run():
     st.title(title)
 
     st.markdown("---")
-
-    st.write("### Pré-processing") 
     
-    st.markdown("Dans cette partie, nous allons voir quels sont les traitements que nous avons effectués sur le JDD afin de rendre ***propre*** \
-            et de ***préparer*** notre jeu de données pour la partie Feature Engineering.\
-                Comme expliqué dans la description des données, nous avons extrait de Kaggle deux bases de données :")
+    st.markdown("Dans cette partie, nous allons voir quels sont les traitements que nous avons effectués sur le jeu de données afin de le préparer pour la partie ***features engineering***. Comme expliqué dans la description des données, nous avons extrait de ***Kaggle*** deux bases de données :")
     
     st.markdown(
                 """
                 - World_hapiness_report.csv
                 - World_hapiness_report_2021.csv""")
 
-    st.write("##### Concaténation") 
-    
-    st.write("Dès l'import des données, la table « World_hapiness_report_2021» est adaptée au format de la table « world_hapiness_report» et on y ajoute la colonne \
-            'year' non présente ainsi ses variables sont renommés pour permettre la fusion des datasets.  \
-            La concaténation entre les 2 tables est alors réalisable et est effectuée.")
+    st.write("### Concaténation") 
+
+    st.write("Dès l'import des données, la table « World_hapiness_report_2021» est adaptée au format de la table « world_hapiness_report» et on y ajoute la colonne 'year' non présente. Les variables sont ensuite renommées pour permettre la fusion des deux jeux. La concaténation entre les deux tables est alors réalisable et est effectuée.")
     
     # Harmonisation par suppression des colonnes n'existant que dans le rapport 2021.
     df2=df2_full.drop(['Regional indicator','Standard error of ladder score','upperwhisker',
@@ -68,40 +62,33 @@ def run():
     # Réindexation du df2021 par rapport au df1
     df2.index=df2.index+1950
 
-    
     # Concaténation des deux jeux de données en un trosième jeu global.
     df_global=pd.concat([df1,df2],axis=0)
     
-    agree = st.checkbox('Afficher le DataFrame concaténé contenant tous les données de 2005 à 2021, df_global')
+    agree = st.checkbox('Afficher le jeu de données concaténées contenant tous les données de 2005 à 2021, **df_global**')
     if agree:
+        df_global['year'] = df_global['year'].astype(float).map('{:.0f}'.format)
         st.write(df_global.head(5))
         st.write(df_global.shape)
     
-    st.write("##### Ajout de la variable 'Regional indicator'")
+    st.write("### Ajout de la variable 'Regional indicator'")
     
-    st.markdown("Dans la table « World_hapiness_report_2021», il existe une colonne avec les continents « Regional indicator » pour chaque pays. Cette variable \
-            peut être pertinente si on l’ajoute à notre DataFrame concaténé (df_global). Pour créer cette colonne dans notre df_global, nous fusionons la colonne \
-            contenant « Regional indicator » avec notre df_global. Suite à cette étape, il ressort des valeurs manquantes dans « Regional indicator ».")
-            
-            
+    st.markdown("Dans la table « World_hapiness_report_2021», il existe une colonne « Regional indicator » avec les continents pour chaque pays. Cette variable peut être pertinente si on l’ajoute à notre jeu de données concaténé (**df_global**). Pour créer cette colonne dans notre **df_global**, nous fusionons la colonne « Regional indicator » avec notre **df_global**. Suite à cette étape, il reste encore des valeurs manquantes dans « Regional indicator ».")
             
     # Epurement du df2021 pour ne conserver que les noms de pays et de continent.
     df_continents=df2_full[['Country name','Regional indicator']] # Ajout de la colonne "Regional Indicator" pour indexer rattacher les pays à leur continent respectif indiqué dans le df2021.
 
-    
     # Fusion fusion du df_global avec celui des continents.
     df_global2=df_global.merge(right=df_continents,on='Country name',how='outer')
     
-    st.markdown("Pour y remédier, nous introduisons alors une nouvelle source de données\
-            ***'pays&continents.csv'*** qui permet suite à une nouvelle fussion de compléter les continents manquants de la variable « Regional indicator ».")
+    st.markdown("Pour y remédier, nous introduisons alors une nouvelle source de données '***pays&continents.csv***' qui permet, suite à une nouvelle fusion, de compléter les continents manquants de la variable « Regional indicator ».")
             
-        
     # Déplacement de la colonne continent en 2e position.
     df_global2.insert(1,'Regional indicator',df_global2.pop('Regional indicator'))
 
     
     # Import du fichier contenant l'ensemble des pays et de leur continent de rattachement.
-    agree = st.checkbox('Afficher le DataFrame contenant les continents')
+    agree = st.checkbox('Afficher le jeu de données contenant les continents')
     if agree:
         st.write(df_continents.head(5))
         st.write(df_continents.shape)
@@ -113,13 +100,13 @@ def run():
     df_global2.insert(1,'Regional indicator',df_global2.pop('Regional indicator'))
 
     
-    agree = st.checkbox('Afficher le DataFrame completé des continents manquants')
+    agree = st.checkbox('Afficher le jeu de données sans continent manquant')
     if agree:
         df_global2.index = df_global2.index + 1
         st.write(df_global2.head(5)) 
         st.write(df_global2.shape)
     
-    st.write("##### Doublons et fautes d'orthographes")
+    st.write("### Doublons et fautes d'orthographes")
     
     # Analyse des doublons : visiblement il n'y a pas de doublon.
     print(f'Il y a {df_global2.duplicated().sum()} doublons dans le jeu de données.')
@@ -129,14 +116,13 @@ def run():
     
     st.write("L'analyse des doublons montre que le jeu de données n'en contient pas. Et l'orthographe des variables catégorielles est sans faute.")
         
-    st.write("##### Gestion des valeurs manquantes")
+    st.write("### Gestion des valeurs manquantes")
     
     st.write("Pour la gestion des valeurs manquantes, nous avons remarqué qu’il manquait généralement des modalités sur certaines variables selon \
             les années mais que les pays avaient toujours quelques années remplies pour chaque variable. Ainsi, nous avons décidé de remplacer les \
             valeurs manquantes par la médiane des valeurs groupées par pays.")
             
     st.write("###### Pourcentage de valeurs manquantes")
-    
     
     size = df_global2.shape
     nan_values = df_global2.isna().sum()
@@ -147,7 +133,6 @@ def run():
     
     st.write("Nous avons décidé de remplacer les valeurs manquantes par la médiane des valeurs groupées par pays pour poursuivre l'exploration.")
     
-
     # Calcul de la médiane en fonction des variables de pays groupés.
     test=df_global2.groupby('Country name')['Perceptions of corruption'].agg('median')
     
@@ -156,22 +141,25 @@ def run():
     df_global2.sort_values('Perceptions of corruption').tail(10)
     
     # Regroupement par pays pour poursuivre l'exploration des données.
-    agree = st.checkbox('Afficher le DataFrame regroupé par pays')
+    agree = st.checkbox('Afficher le jeu de données regroupées par pays')
     if agree:
+        # On convertit l'index pour enlever la virgule
+        df_global2.reset_index(inplace=True)
+        df_global2['index'] = df_global2['index'].map('{:.0f}'.format)
+        df_global2.set_index('index', inplace=True)
+        df_global2['year'] = df_global2['year'].astype(float).map('{:.0f}'.format)
         st.write(df_global2[df_global2['Country name']=='Somalia'].head(5)) 
         st.write(df_global2[df_global2['Country name']=='Somalia'].shape)
     
-    
     # Séparation des variables catégorielles et des variables numériques et obtention des titres des colonnes.
+    df_global2 = df_global2.drop('year', axis=1)
     cat_data_col = df_global2.select_dtypes(include=[object]).columns.tolist()
     num_data_col = df_global2.select_dtypes(include=[np.number]).columns.tolist()
-    num_data_col.remove("year")
     
     st.write("On impute ensuite la médiane à la place des valeurs manquantes par pays et par colonne et on vérifie l'action réalisée:")
     # Imputation de la médiane à la place des valeurs manquantes par pays et par colonne.
     for c in num_data_col:
         df_global2[c]=df_global2.groupby('Country name')[c].transform(lambda x : x.fillna(x.median()))
-    
     
     st.write("###### Pourcentage de valeurs manquantes après 1ère imputation")
     
@@ -183,18 +171,15 @@ def run():
 
     st.bar_chart(nan_values) #graphe après imputation 1
     
-    st.write("Le nombre de Nans a bien diminué mais n'atteint pas zéo : On comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par \
-            manque de données et une impossibilité de calculer la mediane avec une absence de \
-            donnée. Par manque de données, on émet l'hypothèse que ces pays sont à des scores du quartile Q1 par rapport au continent auxquel ils appartiennt.")
+    st.write("Le nombre de valeurs manquantes (**NaN**) a bien diminué mais n'atteint pas zéro : on comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et une impossibilité de calculer la médiane avec une absence de donnée. Ainsi, on émet l'hypothèse que ces pays sont à des scores du **quartile Q1** (premier quartile) par rapport au continent auxquel ils appartiennt.")
 
     # On comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et impossibilité de calculer la mediane avec rien   
     
     # Exploration des lignes qui contiennent encore des valeurs manquantes.
-    agree = st.checkbox('Afficher les lignes de df_global contenant encore des valeurs manquantes')
+    agree = st.checkbox('Afficher les lignes de **df_global** contenant encore des valeurs manquantes')
     if agree:
         st.write(df_global2[df_global2.isna().any(axis=1)].head(20)) 
         st.write(df_global2[df_global2.isna().any(axis=1)].shape)
-        
     
     # Par manque de données, on émet l'hypothèse que ces pays sont à des scores de q1 par rapport au continent auxquel ils appartiennt
 
@@ -202,12 +187,11 @@ def run():
     for c in num_data_col:
         df_global2[c]=df_global2.groupby('Regional indicator')[c].transform(lambda x : x.fillna(x.quantile(q=0.25)))
     
-    
     # Vérification des valeurs manquantes.
-    print(f'Affichage du nombre de doublons par colonne dans le jeu de données soit {df_global2.isna().sum().sum()} valeurs manquantes.')
+    st.write(f'Affichage du nombre de doublons par colonne dans le jeu de données soit : {df_global2.isna().sum().sum()} valeurs manquantes.')
     df_global2.isna().sum()
     
-    st.markdown("Le nombre de valeurs manquantes après la 2ème imputation est maintenant ***nul***.")
+    st.markdown("Il n'y a plus de valeurs manquantes dans le jeu de données.")
     
     # Vérification des valeurs manquantes. # le graphe est vide confirmant l'absence de valeurs manquantes
     
@@ -219,9 +203,7 @@ def run():
     
     # On constate qu'il n'y a plus de valeur manquante.  
     
-    st.markdown("On a maintenant un datadet complet, entier, sans valeurs manquantes, ni fautes, ni doublons")
-    # Affichage du dataset complet et sans valeur manquante.
+    st.markdown("On a maintenant un jeu de données complet, entier, sans valeurs manquantes ; sans faute, ni doublon.")
+    # Affichage du jeu de données complet et sans valeur manquante.
     st.write(df_global2.head(5))
     st.write(df_global2.shape)
-    
-    # Le dataset est entier, sans valeurs manquantes, sans fautes ni doublons.

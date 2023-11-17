@@ -7,6 +7,9 @@ from sklearn.preprocessing import OneHotEncoder
 title = "***Features Engineering***"
 sidebar_name = "Features Engineering"
 
+# Configurer le format sans virgules pour les grands nombres
+pd.options.display.float_format = '{:.0f}'.format
+
 def run():
 
     # Import des jeux de données
@@ -39,7 +42,7 @@ def run():
     
     st.markdown('Puis nous avons procédé aux étapes suivantes:')
     
-    st.write("###### Séparation du jeu de données en jeu d'entrainement et jeu de test")
+    st.markdown("- **Séparation du jeu de données en jeu d'entrainement et jeu de test**")
 
     # Instanciation des jeux d'entraînement et de test. 
     X_train, X_test, y_train, y_test = train_test_split(params,
@@ -58,7 +61,7 @@ def run():
                                                         test_size=0.2,
                                                         random_state=42)''', language='python')
     
-    st.write("###### Utilisation du OneHotEncoder")
+    st.write("- **Utilisation du** ***OneHotEncoder***")
     
     st.markdown( "Les modèles de ***machine learning*** n’étant pas en mesure d’**interpréter les variables qualitatives**, nous devons encoder le nom des régions \
                 afin de rendre ces valeurs exploitables dans **X_train** et **X_test**. Nous utilisons donc la méthode nommée ***One Hot Encoding*** qui créera n-1 colonnes remplies de valeurs booléennes pour savoir si cette ligne appartient à la région indiquée par le nom de la colonne.")
@@ -79,7 +82,6 @@ def run():
     X_train = X_train.drop('Regional indicator', axis=1)
     X_test = X_test.drop('Regional indicator', axis=1)
 
-    
     # Concaténation des jeux avec le jeu encodé
     X_train_concat = pd.concat([X_train,cat_train], axis = 1)
     X_test_concat = pd.concat([X_test,cat_test], axis = 1)
@@ -89,6 +91,11 @@ def run():
 
     agree = st.checkbox('Afficher **X_train** encodé')
     if agree:
+        X_train_concat.index = X_train_concat.index.astype(int)
+        # On convertit l'index pour enlever la virgule
+        X_train_concat.reset_index(inplace=True)
+        X_train_concat['index'] = X_train_concat['index'].map('{:.0f}'.format)
+        X_train_concat.set_index('index', inplace=True)
         st.dataframe(X_train_concat.head())
         
     

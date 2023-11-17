@@ -48,6 +48,7 @@ def run():
     
     agree = st.checkbox('Afficher la table "World-hapiness-report"')
     if agree:
+        df1['year'] = df1['year'].astype(float).map('{:.0f}'.format)
         st.write(df1.head(5))
         st.write(df1.shape)
     
