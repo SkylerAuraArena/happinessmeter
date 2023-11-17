@@ -115,3 +115,17 @@ section[tabindex="0"] .block-container {
   padding-top: 0px;
   padding-bottom: 0px;
 }
+
+/* About */
+.divrefs {
+  width: 30vw;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.spanrefs{
+  min-width: content-fit;
+}
