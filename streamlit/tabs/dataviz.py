@@ -119,10 +119,12 @@ def run():
             ax.set_ylabel('Life Ladder')
             ax.set_title('Boxplot de Life Ladder par région')
 
-            # Ajout du graphique à Streamlit
-            st.pyplot(fig)
+            return fig
+
         mapping(selected_year, all_years)
-        
+        # Ajout du graphique à Streamlit
+        st.pyplot(fig)
+
     elif selected_chart == 'Corrélation des indicateurs':
 
         sns.set()
