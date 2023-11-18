@@ -69,59 +69,55 @@ def run():
         all_years = st.button('Afficher la carte toutes années confondues')
         
         @st.cache
-        def mapping(selected_year, all_years):
+        def generate_map(df, geojson_data, selected_year, all_years):
             # Création de la map
-            m = folium.Map(location=[0, 0], zoom_start=1.3)
-
-            # Ajout des couleurs en fonction du score de Life Ladder de df_global
-            folium.Choropleth(
-            geo_data=geojson_data,
-            name='choropleth',
-            data=filtered_df,
-            columns=['Country name', 'Life Ladder'],  
-            key_on='feature.properties.ADMIN',  
-            fill_color='RdYlGn', 
-            fill_opacity=0.7,
-            line_opacity=0.2,
-            nan_fill_color='white',
-            legend_name='Score de bonheur'
-            ).add_to(m)
-
             if all_years:
-                m_all_years = folium.Map(location=[0,0], zoom_start=1.3)
+                m = folium.Map(location=[0, 0], zoom_start=1.3)
                 folium.Choropleth(
-                geo_data=geojson_data,
-                name='choropleth',
-                data=df_global_carte,
-                columns=['Country name', 'Life Ladder'],  
-                key_on='feature.properties.ADMIN',  
-                fill_color='RdYlGn', 
-                fill_opacity=0.7,
-                line_opacity=0.2,
-                nan_fill_color='white',
-                legend_name='Score de bonheur'
-                ).add_to(m_all_years)
-
-                folium_static(m_all_years)
+                    geo_data=geojson_data,
+                    name='choropleth',
+                    data=df,
+                    columns=['Country name', 'Life Ladder'],
+                    key_on='feature.properties.ADMIN',
+                    fill_color='RdYlGn',
+                    fill_opacity=0.7,
+                    line_opacity=0.2,
+                    nan_fill_color='white',
+                    legend_name='Score de bonheur'
+                ).add_to(m)
             else:
-                folium_static(m)
+                filtered_df = df[df['year'] == selected_year]
+                m = folium.Map(location=[0, 0], zoom_start=1.3)
+                folium.Choropleth(
+                    geo_data=geojson_data,
+                    name='choropleth',
+                    data=filtered_df,
+                    columns=['Country name', 'Life Ladder'],
+                    key_on='feature.properties.ADMIN',
+                    fill_color='RdYlGn',
+                    fill_opacity=0.7,
+                    line_opacity=0.2,
+                    nan_fill_color='white',
+                    legend_name='Score de bonheur'
+                ).add_to(m)
+            return m
 
-            st.subheader("Inégalités du score de Life Ladder parmi les continents")  
-            
-            fig, ax = plt.subplots(figsize=(10, 6))
-            sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global_mean_region, ax=ax,color="#aad3df")
-            plt.xticks(rotation=45)
+        m = generate_map(df_global_carte, geojson_data, selected_year, all_years)
+        folium_static(m)
 
-            ax.set_facecolor('white') 
-            ax.grid(True, linestyle='--', alpha=0.3, color='#bae0fc')  # Grille bleue très clair
-            
-            ax.set_xlabel('Région')
-            ax.set_ylabel('Life Ladder')
-            ax.set_title('Boxplot de Life Ladder par région')
+        st.subheader("Inégalités du score de Life Ladder parmi les continents")  
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global_mean_region, ax=ax,color="#aad3df")
+        plt.xticks(rotation=45)
 
-            return fig
+        ax.set_facecolor('white') 
+        ax.grid(True, linestyle='--', alpha=0.3, color='#bae0fc')  # Grille bleue très clair
+        
+        ax.set_xlabel('Région')
+        ax.set_ylabel('Life Ladder')
+        ax.set_title('Boxplot de Life Ladder par région')
 
-        fig = mapping(selected_year, all_years)
         # Ajout du graphique à Streamlit
         st.pyplot(fig)
 
