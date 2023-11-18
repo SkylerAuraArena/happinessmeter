@@ -4,8 +4,11 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
@@ -61,19 +64,23 @@ def run():
         X_test[cols]=scaler.transform(X_test[cols])
         
         def prediction(regressor):
-            if regressor == 'Random Forest':
-                rg = RandomForestRegressor()
+            if regressor == 'Linear Regressor':
+                rg = LinearRegression()
+            elif regressor == 'Ridge Regressor':
+                rg = Ridge()
             elif regressor == 'Decision Tree Regressor':
                 rg = DecisionTreeRegressor()
-            elif regressor == 'Linear Regressor':
-                rg = LinearRegression()
+            elif regressor == 'Random Forest':
+                rg = RandomForestRegressor()
+            elif regressor == 'KNeighbors Regressor':
+                rg = KNeighborsRegressor()
             rg.fit(X_train, y_train)
             return rg
 
         def scores(rg):
             return rg.score(X_test, y_test)
             
-        choix = ['Random Forest', 'Decision Tree Regressor', 'Linear Regressor']
+        choix = ['Linear Regressor', 'Ridge Regressor', 'Decision Tree Regressor', 'Random Forest', 'KNeighbors Regressor']
         option = st.selectbox('Choix du modèle', choix)
         st.write('Le modèle choisi est :', option)
 
@@ -115,12 +122,16 @@ def run():
         y_test=y_test['Categorie Life Ladder'].values
 
         def prediction(classifier):
-            if classifier == 'Decision Tree Classifier':
+            if classifier == 'Logistic Regression':
+                clf = LogisticRegression()  
+            elif classifier == 'Decision Tree Classifier':
                 clf = DecisionTreeClassifier()
+            elif classifier == 'Support Vector Classifier':
+                clf = SVC()  
+            elif classifier == 'Multilayer Perception Classifier':
+                clf = MLPClassifier()  
             elif classifier == 'Random Forest Classifier':
                 clf = RandomForestClassifier()
-            elif classifier == 'Logistic Regression':
-                clf = LogisticRegression()  
             clf.fit(X_train, y_train)
             return clf
 
@@ -130,7 +141,7 @@ def run():
             elif choice == 'Matrice de confusion':
                 return confusion_matrix(y_test, clf.predict(X_test))
 
-        choix = ['Random Forest Classifier', 'Decision Tree Classifier', 'Logistic Regression']
+        choix = ['Decision Tree Classifier', 'Logistic Regression', 'Support Vector Classifier', 'Multilayer Perception Classifier', 'Random Forest Classifier']
         option = st.selectbox('Choix du modèle', choix)
         st.write('Le modèle choisi est :', option)
         
