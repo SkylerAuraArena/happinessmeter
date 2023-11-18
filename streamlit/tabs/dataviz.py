@@ -17,6 +17,28 @@ sidebar_name = "Visualisation"
 def load_data(file_path):
     return pd.read_csv(file_path)
 
+@st.cache
+def load_geojson(geojson_path):
+    with open(geojson_path, encoding='utf-8') as f:
+        return f.read()
+
+@st.cache(allow_output_mutation=True)
+def generate_map(df, geojson_data):
+    m = folium.Map(location=[0, 0], zoom_start=1.3)
+    folium.Choropleth(
+        geo_data=geojson_data,
+        name='choropleth',
+        data=df,
+        columns=['Country name', 'Life Ladder'],
+        key_on='feature.properties.ADMIN',
+        fill_color='RdYlGn',
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        nan_fill_color='white',
+        legend_name='Score de bonheur'
+    ).add_to(m)
+    return m
+
 def run():
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -55,55 +77,10 @@ def run():
         st.header("Les nuances du bonheur à l'échelle planétaire")
 
         # Import du GeoJSON qui nous servira pour les fontière de la map
-        geojson_data = os.path.join(dir_path, "../../data/countries.geojson")
-        with open(geojson_data, encoding='utf-8') as f:
-            geojson_data=f.read()
+        geojson_path = os.path.join(dir_path, "../../data/countries.geojson")
+        geojson_data = load_geojson(geojson_path)
     
         selected_year = st.slider('Sélectionnez l\'année', min_value=int(df_global_carte['year'].min()), max_value=int(df_global_carte['year'].max()))
-
-        def filter_data_by_year(df, selected_year):
-            return df_global_carte[df_global_carte['year'] == selected_year]
-
-        # Filtre le DataFrame en fonction de l'année sélectionnée
-        filtered_df = filter_data_by_year(df_global_carte, selected_year)
-        all_years = st.button('Afficher la carte toutes années confondues')
-        
-        @st.cache
-        def generate_map(df, geojson_data, selected_year, all_years):
-            # Création de la map
-            if all_years:
-                m = folium.Map(location=[0, 0], zoom_start=1.3)
-                folium.Choropleth(
-                    geo_data=geojson_data,
-                    name='choropleth',
-                    data=df,
-                    columns=['Country name', 'Life Ladder'],
-                    key_on='feature.properties.ADMIN',
-                    fill_color='RdYlGn',
-                    fill_opacity=0.7,
-                    line_opacity=0.2,
-                    nan_fill_color='white',
-                    legend_name='Score de bonheur'
-                ).add_to(m)
-            else:
-                filtered_df = df[df['year'] == selected_year]
-                m = folium.Map(location=[0, 0], zoom_start=1.3)
-                folium.Choropleth(
-                    geo_data=geojson_data,
-                    name='choropleth',
-                    data=filtered_df,
-                    columns=['Country name', 'Life Ladder'],
-                    key_on='feature.properties.ADMIN',
-                    fill_color='RdYlGn',
-                    fill_opacity=0.7,
-                    line_opacity=0.2,
-                    nan_fill_color='white',
-                    legend_name='Score de bonheur'
-                ).add_to(m)
-            return m
-
-        m = generate_map(df_global_carte, geojson_data, selected_year, all_years)
-        folium_static(m)
 
         st.subheader("Inégalités du score de Life Ladder parmi les continents")  
         
@@ -120,6 +97,15 @@ def run():
 
         # Ajout du graphique à Streamlit
         st.pyplot(fig)
+
+        all_years = st.button('Afficher la carte toutes années confondues')
+        if all_years:
+            m = generate_map(df_global_carte, geojson_data)
+        else:
+            filtered_df = df_global_carte[df_global_carte['year'] == selected_year]
+            m = generate_map(filtered_df, geojson_data)
+
+        folium_static(m)
 
     elif selected_chart == 'Corrélation des indicateurs':
 
