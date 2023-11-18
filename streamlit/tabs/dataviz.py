@@ -121,7 +121,7 @@ def run():
 
             return fig
 
-        mapping(selected_year, all_years)
+        fig = mapping(selected_year, all_years)
         # Ajout du graphique à Streamlit
         st.pyplot(fig)
 
