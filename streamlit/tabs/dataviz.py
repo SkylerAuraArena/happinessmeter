@@ -16,26 +16,6 @@ sidebar_name = "Visualisation"
 def load_data(file_path):
     return pd.read_csv(file_path)
 
-def load_geojson(geojson_path):
-    with open(geojson_path, encoding='utf-8') as f:
-        return f.read()
-
-def generate_map(df, geojson_data):
-    m = folium.Map(location=[0, 0], zoom_start=1.3)
-    folium.Choropleth(
-        geo_data=geojson_data,
-        name='choropleth',
-        data=df,
-        columns=['Country name', 'Life Ladder'],
-        key_on='feature.properties.ADMIN',
-        fill_color='RdYlGn',
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        nan_fill_color='white',
-        legend_name='Score de bonheur'
-    ).add_to(m)
-    return m
-
 def run():
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -74,36 +54,73 @@ def run():
         st.header("Les nuances du bonheur à l'échelle planétaire")
 
         # Import du GeoJSON qui nous servira pour les fontière de la map
-        geojson_path = os.path.join(dir_path, "../../data/countries.geojson")
-        geojson_data = load_geojson(geojson_path)
+        geojson_data = os.path.join(dir_path, "../../data/countries.geojson")
+        with open(geojson_data, encoding='utf-8') as f:
+            geojson_data=f.read()
     
         selected_year = st.slider('Sélectionnez l\'année', min_value=int(df_global_carte['year'].min()), max_value=int(df_global_carte['year'].max()))
 
+        def filter_data_by_year(df, selected_year):
+            return df_global_carte[df_global_carte['year'] == selected_year]
+
+        # Filtre le DataFrame en fonction de l'année sélectionnée
+        filtered_df = filter_data_by_year(df_global_carte, selected_year)
         all_years = st.button('Afficher la carte toutes années confondues')
-        if all_years:
-            m = generate_map(df_global_carte, geojson_data)
-        else:
-            filtered_df = df_global_carte[df_global_carte['year'] == selected_year]
-            m = generate_map(filtered_df, geojson_data)
-
-        folium_static(m)
-
-        st.subheader("Inégalités du score de Life Ladder parmi les continents")  
         
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global_mean_region, ax=ax,color="#aad3df")
-        plt.xticks(rotation=45)
+        def mapping(selected_year, all_years):
+            # Création de la map
+            m = folium.Map(location=[0, 0], zoom_start=1.3)
 
-        ax.set_facecolor('white') 
-        ax.grid(True, linestyle='--', alpha=0.3, color='#bae0fc')  # Grille bleue très clair
+            # Ajout des couleurs en fonction du score de Life Ladder de df_global
+            folium.Choropleth(
+            geo_data=geojson_data,
+            name='choropleth',
+            data=filtered_df,
+            columns=['Country name', 'Life Ladder'],  
+            key_on='feature.properties.ADMIN',  
+            fill_color='RdYlGn', 
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            nan_fill_color='white',
+            legend_name='Score de bonheur'
+            ).add_to(m)
+
+            if all_years:
+                m_all_years = folium.Map(location=[0,0], zoom_start=1.3)
+                folium.Choropleth(
+                geo_data=geojson_data,
+                name='choropleth',
+                data=df_global_carte,
+                columns=['Country name', 'Life Ladder'],  
+                key_on='feature.properties.ADMIN',  
+                fill_color='RdYlGn', 
+                fill_opacity=0.7,
+                line_opacity=0.2,
+                nan_fill_color='white',
+                legend_name='Score de bonheur'
+                ).add_to(m_all_years)
+
+                folium_static(m_all_years)
+            else:
+                folium_static(m)
+
+            st.subheader("Inégalités du score de Life Ladder parmi les continents")  
+            
+            fig, ax = plt.subplots(figsize=(10, 6))
+            sns.boxplot(x='Regional indicator', y='Life Ladder', data=df_global_mean_region, ax=ax,color="#aad3df")
+            plt.xticks(rotation=45)
+
+            ax.set_facecolor('white') 
+            ax.grid(True, linestyle='--', alpha=0.3, color='#bae0fc')  # Grille bleue très clair
+            
+            ax.set_xlabel('Région')
+            ax.set_ylabel('Life Ladder')
+            ax.set_title('Boxplot de Life Ladder par région')
+
+            # Ajout du graphique à Streamlit
+            st.pyplot(fig)
+        mapping(selected_year, all_years)
         
-        ax.set_xlabel('Région')
-        ax.set_ylabel('Life Ladder')
-        ax.set_title('Boxplot de Life Ladder par région')
-
-        # Ajout du graphique à Streamlit
-        st.pyplot(fig)
-
     elif selected_chart == 'Corrélation des indicateurs':
 
         sns.set()
@@ -118,7 +135,7 @@ def run():
 
         indicators_list3 = df_global.columns.difference(['year']).difference(['Country name']).difference(['Regional indicator']).difference(['Life Ladder'])
         selected_indicators3 = st.multiselect('Sélectionnez l\'indicateur à afficher:', indicators_list3)
-    
+
         def display_scatter(selected_indicators3):
             for indicator3 in selected_indicators3:
                 # Création du graphique avec Plotly Express
