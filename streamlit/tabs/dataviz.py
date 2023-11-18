@@ -82,9 +82,6 @@ def run():
     
         selected_year = st.slider('Sélectionnez l\'année', min_value=int(df_global_carte['year'].min()), max_value=int(df_global_carte['year'].max()))
 
-        # Ajout du graphique à Streamlit
-        st.pyplot(fig)
-
         all_years = st.button('Afficher la carte toutes années confondues')
         if all_years:
             m = generate_map(df_global_carte, geojson_data)
@@ -106,6 +103,9 @@ def run():
         ax.set_xlabel('Région')
         ax.set_ylabel('Life Ladder')
         ax.set_title('Boxplot de Life Ladder par région')
+
+        # Ajout du graphique à Streamlit
+        st.pyplot(fig)
 
     elif selected_chart == 'Corrélation des indicateurs':
 
