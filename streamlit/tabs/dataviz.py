@@ -13,7 +13,6 @@ import os
 title = "Visualisation"
 sidebar_name = "Visualisation"
 
-@st.cache_data
 def load_data(file_path):
     return pd.read_csv(file_path)
 
@@ -68,7 +67,6 @@ def run():
         filtered_df = filter_data_by_year(df_global_carte, selected_year)
         all_years = st.button('Afficher la carte toutes années confondues')
         
-        @st.cache_data
         def mapping(selected_year, all_years):
             # Création de la map
             m = folium.Map(location=[0, 0], zoom_start=1.3)
@@ -137,7 +135,7 @@ def run():
 
         indicators_list3 = df_global.columns.difference(['year']).difference(['Country name']).difference(['Regional indicator']).difference(['Life Ladder'])
         selected_indicators3 = st.multiselect('Sélectionnez l\'indicateur à afficher:', indicators_list3)
-        @st.cache_data
+
         def display_scatter(selected_indicators3):
             for indicator3 in selected_indicators3:
                 # Création du graphique avec Plotly Express
