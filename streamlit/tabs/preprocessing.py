@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 title = "Préprocessing"
 sidebar_name = "Préprocessing"
@@ -113,16 +114,18 @@ def run():
     st.write("Pour la gestion des valeurs manquantes, nous avons remarqué qu’il manquait généralement des modalités sur certaines variables selon \
             les années mais que les pays avaient toujours quelques années remplies pour chaque variable. Ainsi, nous avons décidé de remplacer les \
             valeurs manquantes par la médiane des valeurs groupées par pays.")
-            
-    st.write("###### Nombre de valeurs manquantes")
     
     size = df_global2.shape
-    nan_values = df_global2.isna().sum()
+    nan_values = df_global2.isna().sum().sort_values(ascending=True)
 
-    # nan_values = nan_values.sort_values(ascending=False)*100/size[0]
+    plt.figure(figsize=(10, 6))
+    plt.barh(nan_values.index, nan_values)
+    plt.xlabel('Nombre de valeurs NaN')
+    plt.ylabel('Colonnes')
+    plt.title('Nombre de valeurs NaN par colonne avant imputation')
+    plt.legend().remove()  # Supprimer la légende
+    st.pyplot(plt)
 
-    st.bar_chart(nan_values)
-    
     st.write("Nous avons décidé de remplacer les valeurs manquantes par la médiane des valeurs groupées par pays pour poursuivre l'exploration.")
     
     # Calcul de la médiane en fonction des variables de pays groupés.
@@ -143,24 +146,27 @@ def run():
         st.write(df_global2[df_global2['Country name']=='Somalia'].shape)
     
     # Séparation des variables catégorielles et des variables numériques et obtention des titres des colonnes.
-    df_global2 = df_global2.drop('year', axis=1)
     cat_data_col = df_global2.select_dtypes(include=[object]).columns.tolist()
     num_data_col = df_global2.select_dtypes(include=[np.number]).columns.tolist()
+    num_data_col.remove("year")
     
     st.write("On impute ensuite la médiane à la place des valeurs manquantes par pays et par colonne et on vérifie l'action réalisée:")
     # Imputation de la médiane à la place des valeurs manquantes par pays et par colonne.
     for c in num_data_col:
         df_global2[c]=df_global2.groupby('Country name')[c].transform(lambda x : x.fillna(x.median()))
     
-    st.write("###### Nombre de valeurs manquantes après 1ère imputation")
-    
     # Vérification des valeurs manquantes.
     
     size = df_global2.shape
-    nan_values = df_global2.isna().sum()
-    # nan_values = nan_values.sort_values(ascending=True)*100/size[0]
+    nan_values = df_global2.isna().sum().sort_values(ascending=True)
 
-    st.bar_chart(nan_values) #graphe après imputation 1
+    plt.figure(figsize=(10, 6))
+    plt.barh(nan_values.index, nan_values)
+    plt.xlabel('Nombre de valeurs NaN')
+    plt.ylabel('Colonnes')
+    plt.title('Nombre de valeurs NaN par colonne après la 1re imputation')
+    plt.legend().remove()  # Supprimer la légende
+    st.pyplot(plt)
     
     st.write("Le nombre de valeurs manquantes (**NaN**) a bien diminué mais n'atteint pas zéro : on comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et une impossibilité de calculer la médiane avec une absence de donnée. Ainsi, on émet l'hypothèse que ces pays sont à des scores du **quartile Q1** (premier quartile) par rapport au continent auxquel ils appartiennt.")
 
@@ -181,7 +187,7 @@ def run():
     # Vérification des valeurs manquantes.
     st.write(f'Le nombre de valeurs manquantes par colonne après imputation est de : {df_global2.isna().sum().sum()} valeur manquante.')
 
-    st.markdown("Ainsi, après la 2ème imputation via les scores du quartile Q1, il n'y a plus de valeurs manquantes dans le jeu de données.")
+    st.markdown("Ainsi, après la 2e imputation via les scores du quartile Q1, il n'y a plus de valeurs manquantes dans le jeu de données.")
     
     # Vérification des valeurs manquantes. # le graphe est vide confirmant l'absence de valeurs manquantes
     
@@ -189,7 +195,8 @@ def run():
     nan_values = df_global2.isna().sum()
     # nan_values = nan_values.sort_values(ascending=True)*100/size[0]
 
-    st.bar_chart(nan_values) #graphe après imputation 2
+    st.write("###### Nombre de valeurs manquantes après la 2nde imputation")
+    st.bar_chart(nan_values) # graphe après la seconde imputation
     
     # On constate qu'il n'y a plus de valeur manquante.  
     
