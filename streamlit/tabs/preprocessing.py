@@ -120,9 +120,9 @@ def run():
 
     plt.figure(figsize=(10, 6))
     plt.barh(nan_values.index, nan_values)
-    plt.xlabel('Nombre de valeurs NaN')
+    plt.xlabel('Nombre de valeurs valeurs manquantes')
     plt.ylabel('Colonnes')
-    plt.title('Nombre de valeurs NaN par colonne avant imputation')
+    plt.title('Nombre de valeurs valeurs manquantes par colonne avant imputation')
     plt.legend().remove()  # Supprimer la légende
     st.pyplot(plt)
 
@@ -162,13 +162,13 @@ def run():
 
     plt.figure(figsize=(10, 6))
     plt.barh(nan_values.index, nan_values)
-    plt.xlabel('Nombre de valeurs NaN')
+    plt.xlabel('Nombre de valeurs valeurs manquantes')
     plt.ylabel('Colonnes')
-    plt.title('Nombre de valeurs NaN par colonne après la 1re imputation')
+    plt.title('Nombre de valeurs valeurs manquantes par colonne après la 1re imputation')
     plt.legend().remove()  # Supprimer la légende
     st.pyplot(plt)
     
-    st.write("Le nombre de valeurs manquantes (**NaN**) a bien diminué mais n'atteint pas zéro : on comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et une impossibilité de calculer la médiane avec une absence de donnée. Ainsi, on émet l'hypothèse que ces pays sont à des scores du **quartile Q1** (premier quartile) par rapport au continent auxquel ils appartiennt.")
+    st.write("Le nombre de valeurs manquantes a bien diminué mais n'atteint pas zéro : on comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et une impossibilité de calculer la médiane avec une absence de donnée. Ainsi, on émet l'hypothèse que ces pays sont à des scores du **quartile Q1** (premier quartile) par rapport au continent auxquel ils appartiennt.")
 
     # On comprend ici que certaines valeurs manquantes n'ont pas pu etre remplies par manque de données et impossibilité de calculer la mediane avec rien   
     
@@ -196,9 +196,9 @@ def run():
 
     plt.figure(figsize=(10, 6))
     plt.barh(nan_values.index, nan_values)
-    plt.xlabel('Nombre de valeurs NaN')
+    plt.xlabel('Nombre de valeurs valeurs manquantes')
     plt.ylabel('Colonnes')
-    plt.title('Nombre de valeurs NaN par colonne après la 2nde imputation')
+    plt.title('Nombre de valeurs valeurs manquantes par colonne après la 2nde imputation')
     plt.legend().remove()  # Supprimer la légende
     st.pyplot(plt)
     
