@@ -148,12 +148,12 @@ def run():
     # Séparation des variables catégorielles et des variables numériques et obtention des titres des colonnes.
     cat_data_col = df_global2.select_dtypes(include=[object]).columns.tolist()
     num_data_col = df_global2.select_dtypes(include=[np.number]).columns.tolist()
-    num_data_col.remove("year")
     
     st.write("On impute ensuite la médiane à la place des valeurs manquantes par pays et par colonne et on vérifie l'action réalisée:")
     # Imputation de la médiane à la place des valeurs manquantes par pays et par colonne.
     for c in num_data_col:
-        df_global2[c]=df_global2.groupby('Country name')[c].transform(lambda x : x.fillna(x.median()))
+        if c != 'year':
+            df_global2[c]=df_global2.groupby('Country name')[c].transform(lambda x : x.fillna(x.median()))
     
     # Vérification des valeurs manquantes.
     
