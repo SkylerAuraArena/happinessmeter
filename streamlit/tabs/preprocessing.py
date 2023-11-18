@@ -192,11 +192,15 @@ def run():
     # Vérification des valeurs manquantes. # le graphe est vide confirmant l'absence de valeurs manquantes
     
     size = df_global2.shape
-    nan_values = df_global2.isna().sum()
-    # nan_values = nan_values.sort_values(ascending=True)*100/size[0]
+    nan_values = df_global2.isna().sum().sort_values(ascending=True)
 
-    st.write("###### Nombre de valeurs manquantes après la 2nde imputation")
-    st.bar_chart(nan_values) # graphe après la seconde imputation
+    plt.figure(figsize=(10, 6))
+    plt.barh(nan_values.index, nan_values)
+    plt.xlabel('Nombre de valeurs NaN')
+    plt.ylabel('Colonnes')
+    plt.title('Nombre de valeurs NaN par colonne après la 1re imputation')
+    plt.legend().remove()  # Supprimer la légende
+    st.pyplot(plt)
     
     # On constate qu'il n'y a plus de valeur manquante.  
     
