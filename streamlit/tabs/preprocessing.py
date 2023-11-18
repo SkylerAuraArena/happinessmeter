@@ -198,7 +198,7 @@ def run():
     plt.barh(nan_values.index, nan_values)
     plt.xlabel('Nombre de valeurs NaN')
     plt.ylabel('Colonnes')
-    plt.title('Nombre de valeurs NaN par colonne après la 1re imputation')
+    plt.title('Nombre de valeurs NaN par colonne après la 2nde imputation')
     plt.legend().remove()  # Supprimer la légende
     st.pyplot(plt)
     
