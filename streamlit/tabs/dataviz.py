@@ -13,16 +13,13 @@ import os
 title = "Visualisation"
 sidebar_name = "Visualisation"
 
-@st.cache
 def load_data(file_path):
     return pd.read_csv(file_path)
 
-@st.cache
 def load_geojson(geojson_path):
     with open(geojson_path, encoding='utf-8') as f:
         return f.read()
 
-@st.cache(allow_output_mutation=True)
 def generate_map(df, geojson_data):
     m = folium.Map(location=[0, 0], zoom_start=1.3)
     folium.Choropleth(
@@ -121,7 +118,7 @@ def run():
 
         indicators_list3 = df_global.columns.difference(['year']).difference(['Country name']).difference(['Regional indicator']).difference(['Life Ladder'])
         selected_indicators3 = st.multiselect('Sélectionnez l\'indicateur à afficher:', indicators_list3)
-        @st.cache
+    
         def display_scatter(selected_indicators3):
             for indicator3 in selected_indicators3:
                 # Création du graphique avec Plotly Express
