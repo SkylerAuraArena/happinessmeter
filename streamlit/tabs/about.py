@@ -26,7 +26,7 @@ def run():
     """
 
     # Écrire les liens avec le logo
-    st.markdown(html_template_no_github.format("Arlène MULOWAY", "https://www.linkedin.com/in/arlene-muloway"), unsafe_allow_html=True)
+    st.markdown(html_template_no_github.format("Arlène MULOWAY", "https://www.linkedin.com/in/arl%C3%A8ne-muloway/"), unsafe_allow_html=True)
     st.markdown(html_template_github.format("Étienne BRETON", "https://www.linkedin.com/in/etienne-breton-audit-data-blockchain","https://github.com/SkylerAuraArena"), unsafe_allow_html=True)
     st.markdown(html_template_no_github.format("Malak TAYEB", "https://www.linkedin.com/in/malak-tayeb-70b4b34b"), unsafe_allow_html=True)
     st.markdown(html_template_no_github.format("Victor LUCAS", "https://www.linkedin.com/in/victor-lucas-7002b9114"), unsafe_allow_html=True)
