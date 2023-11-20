@@ -110,7 +110,7 @@ def run():
             ax.set_facecolor('white') 
             ax.grid(True, linestyle='--', alpha=0.3, color='#bae0fc')  # Grille bleu très clair
 
-            ax.set_xlabel('Région')
+            ax.set_xlabel('Régions')
             ax.set_ylabel('Life Ladder')
             ax.set_title('Boxplot de Life Ladder par région')
             # Ajouter le graphique à Streamlit
